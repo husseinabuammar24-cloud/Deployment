@@ -141,7 +141,11 @@ def predict_price(property: propertyData):
     
 @app.get("/")
 def health_check():
-    return "alive"
+    return {
+        "status": "healthy",
+        "model": "property_price_v1",
+        "model_loaded": model is not None,
+    }
 
 
 # Start uvicorn (bashuvicorn app.main:app --reload) THEN -> http://127.0.0.1:8001/docs
