@@ -14,25 +14,32 @@ A machine learning system that predicts Belgian real estate prices, exposed thro
 Deployment/
 ├── app/
 │   ├── __init__.py
-│   └── main.py                   # FastAPI app: /predict and / (health check)
-├── models/
-│   ├── model.pkl                 # trained regression model
-│   ├── encoder.pkl               # fitted OneHotEncoder
-│   ├── scaler.pkl                # fitted scaler for numeric features
-│   ├── impute_values.pkl         # fitted imputation values
-│   └── feature_names.pkl         # training-time column order
-├── streamlit/
-│   └── Streamlit_app.py          # Streamlit frontend
+│   └── main.py                   # FastAPI app (legacy version)
 ├── Data/
 │   ├── SaleCleanFinal.csv
 │   └── SaleCleanForAnalysis.csv
 ├── dev/
-│   └── Mynotebook.ipynb          # exploration / training notebook
-├── Dockerfile                    # optional, for local containerized testing (not used by Render)
+│   ├── Mynotebook.ipynb          # exploration notebook
+│   └── train_model.py            # training script (legacy version)
+├── models/
+│   ├── model.pkl                 # trained regression model (legacy)
+│   ├── encoder.pkl                # fitted OneHotEncoder (legacy)
+│   ├── scaler.pkl                 # fitted scaler for numeric features (legacy)
+│   ├── impute_values.pkl          # fitted imputation values (legacy)
+│   └── feature_names.pkl          # training-time column order (legacy)
+├── Pipeline/
+│   ├── main.py                    # FastAPI app (current version)
+│   └── train_model_pipeline.py    # training script (current version)
+├── streamlit/
+│   └── Streamlit_app.py           # Streamlit frontend
+├── venv/
+├── .gitignore
+├── Dockerfile
 ├── requirements.txt
-├── train_model.py                # training script (preprocessing + model fit)
 └── README.md
 ```
+
+`app/`, `dev/`, and `models/` are what's currently deployed. `Pipeline/` is a newer version — training and preprocessing combined into a single scikit-learn `Pipeline`, saved as one `pipeline.pkl` — not yet switched over on Render.
 
 ---
 
@@ -122,13 +129,18 @@ This opens the app at `http://localhost:8501`. The `API_URL` at the top of `Stre
 
 ## Model
 
-Trained with scikit-learn on cleaned Belgian property listing data (`Data/SaleCleanFinal.csv`). Preprocessing includes:
+Trained with scikit-learn on cleaned Belgian property listing data (`Data/SaleCleanFinal.csv` / `Data/SaleCleanForAnalysis.csv`).
 
-- Numeric feature scaling (`scaler.pkl`)
-- One-hot encoding of categorical features (`encoder.pkl`)
+The deployed API (`app/main.py`) loads four separately fitted artifacts and applies them in order:
+
 - Missing-value imputation (`impute_values.pkl`)
+- One-hot encoding of categorical features (`encoder.pkl`)
+- Numeric feature scaling (`scaler.pkl`)
+- The trained model (`model.pkl`)
 
-See `train_model.py` for the full training and preprocessing pipeline.
+See `dev/train_model.py` for the training and preprocessing steps that produced these.
+
+A newer version lives in `Pipeline/` — it combines imputation, encoding, scaling, and the model into a single `sklearn.pipeline.Pipeline`, saved as one `pipeline.pkl` (via `Pipeline/train_model_pipeline.py`, served by `Pipeline/main.py`). This isn't deployed yet; switch Render's start command to `uvicorn Pipeline.main:app ...` when you're ready to cut over.
 
 ---
 
@@ -143,11 +155,11 @@ See `train_model.py` for the full training and preprocessing pipeline.
 
 **Render service settings:**
 
-| Setting        | Value                                              |
-| -------------- | --------------------------------------------------- |
-| Runtime        | Python 3                                            |
-| Build Command  | `pip install -r requirements.txt`                   |
-| Start Command  | `uvicorn app.main:app --host 0.0.0.0 --port $PORT`  |
+| Setting        | Value                                                     |
+| -------------- | ----------------------------------------------------------- |
+| Runtime        | Python 3                                                    |
+| Build Command  | `pip install -r requirements.txt`                            |
+| Start Command  | `uvicorn app.main:app --host 0.0.0.0 --port $PORT`           |
 
 ### Verify the API is live
 
