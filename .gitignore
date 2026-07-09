@@ -19,3 +19,4 @@ bin-release/
 .DS_store
 
 __pycache__
+.devcontainer
