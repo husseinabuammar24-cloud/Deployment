@@ -50,9 +50,7 @@ Deployment/
 3. The API preprocesses the input using the *same* fitted encoder, scaler, and imputer from training, runs it through the model, and returns a predicted price.
 4. Streamlit displays the result.
 
-```
-GitHub repo → Render (native Python build) → API  ←→  Streamlit Community Cloud (Web app)  ←→  Users
-```
+![How it works](images/how%20it%20works.png)
 
 ---
 
