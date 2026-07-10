@@ -14,22 +14,22 @@ A machine learning system that predicts Belgian real estate prices, exposed thro
 Deployment/
 ├── app/
 │   ├── __init__.py
-│   └── main.py                   # FastAPI app (legacy version)
+│   └── main.py                   # FastAPI app
 ├── Data/
 │   ├── SaleCleanFinal.csv
 │   └── SaleCleanForAnalysis.csv
 ├── dev/
 │   ├── Mynotebook.ipynb          # exploration notebook
-│   └── train_model.py            # training script (legacy version)
+│   └── train_model.py            # training script
 ├── models/
-│   ├── model.pkl                 # trained regression model (legacy)
-│   ├── encoder.pkl                # fitted OneHotEncoder (legacy)
-│   ├── scaler.pkl                 # fitted scaler for numeric features (legacy)
-│   ├── impute_values.pkl          # fitted imputation values (legacy)
-│   └── feature_names.pkl          # training-time column order (legacy)
+│   ├── model.pkl                 # trained regression model
+│   ├── encoder.pkl                # fitted OneHotEncoder
+│   ├── scaler.pkl                 # fitted scaler for numeric features 
+│   ├── impute_values.pkl          # fitted imputation values 
+│   └── feature_names.pkl          # training-time column order
 ├── Pipeline/
-│   ├── main.py                    # FastAPI app (current version)
-│   └── train_model_pipeline.py    # training script (current version)
+│   ├── main.py                    # FastAPI app 
+│   └── train_model_pipeline.py    # training script 
 ├── streamlit/
 │   └── Streamlit_app.py           # Streamlit frontend
 ├── venv/

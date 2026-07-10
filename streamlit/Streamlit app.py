@@ -29,7 +29,7 @@ with st.expander("API status"):
         except requests.exceptions.RequestException as e:
             st.error(f"Could not reach API: {e}")
     st.caption(
-        "Render free-tier apps sleep when idle. The first request after a while" 
+        "Render free-tier apps sleep when idle. The first request after a while " 
         "can take 30-60 seconds to wake it up"
     )
 st.divider()
